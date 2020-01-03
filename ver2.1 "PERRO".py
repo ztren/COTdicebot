@@ -86,7 +86,7 @@ def returner(msg):
         else:
             s1 = '。复读'
         if ' ' in msg.text:
-            if len(msg.text[4:]) > 30:
+            if len(msg.text[4:]) > 50:
                 group.send('@'+tn+' '+RCG[randint(0,len(RCG)-1)])
             else:
                 group.send(msg.text[4:] + '\n——' + tn)
