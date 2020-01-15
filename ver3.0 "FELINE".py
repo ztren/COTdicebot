@@ -16,11 +16,14 @@ hlp = \
 '——CRISPY酱使用指南——\n\
 目前本机.和。通用，已经开发的功能有：\n\
 .rd [text] = [因为text]投掷1D100的一颗骰子\n\
-.rXdY [text] = [因为text]投掷XDY的一颗骰子，支持在后面加入一位+-*/运算符\n\
+.rXdY [text] = [因为text]投掷XDY的一颗骰子\n\
 .ark [x] = [x次重复]获取人物卡各项数值\n\
 .art [x] = [x次重复]获取人物卡各项潜力信息\n\
 .nn [name] = 将自己在骰子中显示的昵称改为name，若[name]为空则还原默认群昵称\n\
 .复读 [msg] = 让骰子复读你的话//可以用来做语录\n\
+.reg all = 根据。ark填出来的卡读入（记录不保存！）\n\
+.reg <XXX+改变量> 人物卡数据改变（如AGG+1）\n\
+.jrrp 今日人品（1d100到10以下-1，90以上+1，不包含加减）\n\
 *RPT ON(OFF)* = 开启或关闭随机复读功能\n\
 目前随机复读状态为：\
 '#帮助文本
@@ -28,6 +31,8 @@ rpt = True
 pu = []
 nm = []
 pl = []
+rp = []
+dt = strftime("%Y年%m月%d日", localtime())
 rgnm = False
 rgid = -1
 class pers:
@@ -49,7 +54,7 @@ class pers:
 
 @bot.register(group,TEXT)       
 def returner(msg):
-    global RCG,YYY,pl,rpt,DRM,hlp,rgnm,rgid,CRD
+    global RCG,YYY,pl,rpt,DRM,hlp,rgnm,rgid,CRD,rp,dt
     if msg.is_at:
         group.send(YYY[randint(0,len(YYY)-1)])
     f = ''
@@ -60,6 +65,7 @@ def returner(msg):
         pu.append(msg.member.puid)
         nm.append(msg.member.name)
         pl.append(pers(-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1))
+        rp.append(randint(1,100))
     if rgnm == True:
         if msg.member.puid == pu[rgid]:
             rgnm = False
@@ -95,10 +101,6 @@ def returner(msg):
             if msg.member.puid == pu[i]:
                 tn = nm[i]
                 si = i
-        if msg.text[0] == '.':
-            s1 = '.reg'
-        else:
-            s1 = '。reg'
         try:
             x = ''
             x = msg.text[5:]
@@ -120,25 +122,23 @@ def returner(msg):
                     group.send(tn+'的'+msg.text[5:8].upper()+'数值要改变？唔好的：\n'+msg.text[5:].upper()+' → '+str(eval('pl['+str(si)+'].'+msg.text[5:8].upper())))
         except:
             group.send('输入格式好像不太对的说')
-    if ('.rd' in msg.text):
-        f = '.r1d100'
-        if len(msg.text) > 3:
-            if msg.text[3] == ' ':
-                f += msg.text[3:]
-    elif ('。rd' in msg.text):
-        f = '。r1d100'
-        if len(msg.text) > 3:
-            if msg.text[3] == ' ':
-                f += msg.text[3:]
+    if ('.rd' in msg.text) | ('。rd' in msg.text):
+        f = '.r1d100'+msg.text[3:]
+    if ('.jrrp' in msg.text) | ('。jrrp' in msg.text):
+        for i in range(0,len(pu)):
+            if msg.member.puid == pu[i]:
+                tn = nm[i]
+                si = i
+        group.send(tn+'，你在'+dt+'的人品为：'+str(rp[si])+'！\n试试。rd提升人品吧！')
+        if (dt != (strftime("%Y年%m月%d日", localtime()))):
+            for i in range(0,len(pu)):
+                rp[i] = randint(1,100)
+                dt = strftime("%Y年%m月%d日", localtime())
     if ('.nn' in msg.text) | ('。nn' in msg.text):
         for i in range(0,len(pu)):
             if msg.member.puid == pu[i]:
                 tn = nm[i]
                 si = i
-        if msg.text[0] == '.':
-            s1 = '.nn'
-        else:
-            s1 = '。nn'
         if ' ' in msg.text:
             if len(msg.text[4:]) > 30:
                 group.send('@'+tn+' '+RCG[randint(0,len(RCG)-1)])
@@ -166,10 +166,6 @@ def returner(msg):
         for i in range(0,len(pu)):
             if msg.member.puid == pu[i]:
                 tn = nm[i]
-        if msg.text[0] == '.':
-            s1 = '.复读'
-        else:
-            s1 = '。复读'
         if ' ' in msg.text:
             if len(msg.text[4:]) > 50:
                 group.send('@'+tn+' '+RCG[randint(0,len(RCG)-1)])
@@ -183,12 +179,8 @@ def returner(msg):
             if msg.member.puid == pu[i]:
                 tn = nm[i]
         s = tn+'，想获取自己的潜力信息吗？啊(哈欠)，等我roll一下..\n——————————\n'
-        if msg.text[0] == '.':
-            s1 = '.art'
-        else:
-            s1 = '。art'
         if ' ' in msg.text:
-            num = findall(s1+' (\d+)', msg.text)
+            num = findall(msg.text[0]+' (\d+)', msg.text)
             x = int(num[0][0])
         for j in range(0,x):
             zy = 0#卓越个数
@@ -233,12 +225,8 @@ def returner(msg):
             if msg.member.puid == pu[i]:
                 tn = nm[i]
         s = '欢迎来到泰拉世界哦，'+tn+'酱\n'
-        if msg.text[0] == '.':
-            s1 = '.ark'
-        else:
-            s1 = '。ark'
         if ' ' in msg.text:
-            num = findall(s1+' (\d+)', msg.text)
+            num = findall(msg.text[0]+' (\d+)', msg.text)
             x = int(num[0][0])
         for i in range(0,x):
             ax = [((randint(1,6)+randint(1,6)+randint(1,6))*5) for i in range(0,8)]\
@@ -266,43 +254,32 @@ def returner(msg):
         for i in range(0,len(pu)):
             if msg.member.puid == pu[i]:
                 tn = nm[i]
-        if msg.text[0] == '.':
-            s1 = '.'
-        else:
-            s1 = '。'
+                si = i
         s = ''
         if f == '':
             f = msg.text
         if ' ' in f:
-            if ('+' in f)|('-' in f)|('*' in f)|('/' in f):
-                num = findall(s1+'r(\d+)d(\d+)(.)(\d+) (.+)', f)
-                x = num[0][0]
-                y = num[0][1]
-                z = num[0][4]
-                t0 = num[0][2]
-                t1 = num[0][3]
-            else:
-                num = findall(s1+'r(\d+)d(\d+) (.+)', f)
-                x = num[0][0]
-                y = num[0][1]
-                z = num[0][2]
-                t0 = ''
+            xx = f.split(' ')[0][2:]
+            z = f[len(xx)+3:]
+            x = xx.split('d')[0]
+            y = xx.split('d')[1]
+            num = findall('(\d+)(.+)',y)
+            y = num[0][0]
+            t = num[0][1]
+            if len(t) <= 1:
+                y = y+t
+                t = ''
         else:
-            if ('+' in f)|('-' in f)|('*' in f)|('/' in f):
-                num = findall(s1+'r(\d+)d(\d+)(.)(\d+)', f)
-                x = num[0][0]
-                y = num[0][1]
-                z = ''
-                t0 = num[0][2]
-                t1 = num[0][3]
-            else:
-                num = findall(s1+'r(\d+)d(\d+)', f)
-                x = num[0][0]
-                y = num[0][1]
-                z = ''
-                t0 = ''
+            x = f.split('d')[0][2:]
+            y = f.split('d')[1]
+            z = ''
+            num = findall('(\d+)(.+)',y)
+            y = num[0][0]
+            t = num[0][1]
+            if len(t) <= 1:
+                y = y+t
+                t = ''
         dc = 0
-        f = ''
         if (int(x) > 100) | (int(y) > 100000):
             group.send('@'+tn+' '+RCG[randint(0,len(RCG)-1)])
         else:
@@ -312,28 +289,26 @@ def returner(msg):
                 if i != int(x):
                     s += '+'
                 elif int(x) > 1:
-                    if t0 != '':
-                        s += ')' + t0 + t1
+                    if t != '':
+                        s += ')' + t
                     s += '='
                 else:
                     s = ''
-                    if t0 != '':
-                        s += str(k) + ')' + t0 + t1 + '='
+                    if t != '':
+                        s += str(k) + ')' + t + '='
                 dc += k
-            if t0 == '+':
-                dc += int(t1)
-            elif t0 == '-':
-                dc -= int(t1)
-            elif t0 == '*':
-                dc *= int(t1)
-            elif t0 == '/':
-                dc //= int(t1)
-            if (t0 != '') :
-                y += t0 + t1
+                if (f[1:7] == 'r1d100'):
+                    rp[si] = rp[si] - 1 if k <= 10 else rp[si]
+                    rp[si] = rp[si] + 1 if k >= 90 else rp[si]
+                    if (k<=10) | (k>=90):
+                        group.send(tn+'的今日人品变动！现在是：'+str(rp[si])+'！')
+            if (t != '') :
+                y += t
                 s = '(' + s
             if (z == ''):
-                group.send(tn+' 骰出了 '+x+'d'+y+'='+s+str(dc))
+                group.send(tn+' 骰出了 '+x+'d'+y+'='+s+str(eval('floor('+str(dc)+t+')')))
             else:
-                group.send('由于 '+z+' 检定，'+tn+'骰出了 '+x+'d'+y+'='+s+str(dc))
+                group.send('由于 '+z+' 检定，'+tn+'骰出了 '+x+'d'+y+'='+s+str(eval('floor('+str(dc)+t+')')))
+        f = ''
     sleep(2)
 embed()
