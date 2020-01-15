@@ -65,29 +65,20 @@ def returner(msg):
             rgnm = False
             try:
                 num = findall('\
-攻击AGG：(\d+)\n\
-体质CON：(\d+)\n\
-敏捷DEX：(\d+)\n\
-外貌APP：(\d+)\n\
-意志POW：(\d+)\n\
-经验EXP：(\d+)\n\
-感染ORG：(\d+)\n\
-幸运LUK：(\d+)\n\
-智力INT：(\d+)\n\
-教育EDU：(\d+)\n\
-体型SIZ：(\d+)\
+攻击(.+)：(\d+)\n\
+体质(.+)：(\d+)\n\
+敏捷(.+)：(\d+)\n\
+外貌(.+)：(\d+)\n\
+意志(.+)：(\d+)\n\
+经验(.+)：(\d+)\n\
+感染(.+)：(\d+)\n\
+幸运(.+)：(\d+)\n\
+智力(.+)：(\d+)\n\
+教育(.+)：(\d+)\n\
+体型(.+)：(\d+)\
 ',msg.text)
-                pl[rgid].AGG = int(num[0][0])
-                pl[rgid].CON = int(num[0][1])
-                pl[rgid].DEX = int(num[0][2])
-                pl[rgid].APP = int(num[0][3])
-                pl[rgid].POW = int(num[0][4])
-                pl[rgid].EXP = int(num[0][5])
-                pl[rgid].ORG = int(num[0][6])
-                pl[rgid].LUK = int(num[0][7])
-                pl[rgid].INT = int(num[0][8])
-                pl[rgid].EDU = int(num[0][9])
-                pl[rgid].SIZ = int(num[0][10])
+                for i in range(0,11):
+                    exec('pl['+str(rgid)+'].'+num[0][i*2]+'=int('+num[0][i*2+1]+')')
                 pl[rgid].DUR = ceil((pl[rgid].CON + pl[rgid].SIZ) / 4)
                 pl[rgid].SKL = (pl[rgid].INT + pl[rgid].EXP + pl[rgid].EDU) * 2
                 pl[rgid].ART = floor(sqrt(pl[rgid].ORG + pl[rgid].INT + pl[rgid].EDU + pl[rgid].EXP)) - 10
