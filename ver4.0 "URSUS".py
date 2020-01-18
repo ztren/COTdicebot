@@ -110,6 +110,8 @@ def returner(msg):
         nm.append(msg.member.name)
         pl.append(pers(-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0))
         rp.append(randint(1,100))
+    if ('.rd' in msg.text) | ('。rd' in msg.text):
+        f = '.r1d100'+msg.text[3:]
     if (randint(1,15) == 1) & (len(msg.text) <= 30) & (rpt == True):
         for i in range(0,len(pu)):
             if msg.member.puid == pu[i]:
@@ -333,8 +335,6 @@ def returner(msg):
             co = False
         except:
             group.send('输入格式好像不太对的说')
-    elif ('.rd' in msg.text) | ('。rd' in msg.text):
-        f = '.r1d100'+msg.text[3:]
     elif ('.jrrp' in msg.text) | ('。jrrp' in msg.text):
         for i in range(0,len(pu)):
             if msg.member.puid == pu[i]:
