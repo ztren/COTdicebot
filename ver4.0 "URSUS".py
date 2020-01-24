@@ -11,7 +11,7 @@ group = bot.groups().search('CallOfTheresa')[0]
 CRD = ['AGG','CON','DEX','APP','POW','EXP','ORG','LUK','INT','EDU','SIZ','DUR','SKL','ART']#人物卡
 RCG = ['cnm','sb','nmsl','傻逼','rnm','gck','爬','给爷爬']#random curse generator
 YYY = ['干嘛戳我Q_Q','不要戳了啦！TAT','再戳就生气了！','干嘛QwQ','嘤','QwQ','TAT','呜呜呜他欺负我','坏人走开']#嘤嘤嘤
-DRM = ['昂？','唔……','啥啊','唔嗯','啊？','#¥…#¥!@#','搜到有']#梦话
+DRM = ['昂？','唔……','啥啊','唔嗯','啊？','#¥…#¥!@#','搜到有','……城市……压过来了……']#梦话
 hlp = \
 '——CRISPY酱使用指南——\n\
 目前本机.和。通用，已经开发的功能有：\n\
@@ -110,8 +110,15 @@ def returner(msg):
         nm.append(msg.member.name)
         pl.append(pers(-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0))
         rp.append(randint(1,100))
+    if (dt != (strftime("%Y年%m月%d日", localtime()))):
+        for i in range(0,len(pu)):
+            rp[i] = randint(1,100)
+            dt = strftime("%Y年%m月%d日", localtime())
     if ('.rd' in msg.text) | ('。rd' in msg.text):
-        f = '.r1d100'+msg.text[3:]
+        if (len(msg.text) == 3) | (msg.text[3:4] == ' '):
+            f = '.r1d100'+msg.text[3:]
+        else:
+            f = '.r1d'+msg.text[3:]
     if (randint(1,15) == 1) & (len(msg.text) <= 30) & (rpt == True):
         for i in range(0,len(pu)):
             if msg.member.puid == pu[i]:
@@ -340,10 +347,6 @@ def returner(msg):
             if msg.member.puid == pu[i]:
                 tn = nm[i]
                 si = i
-        if (dt != (strftime("%Y年%m月%d日", localtime()))):
-            for i in range(0,len(pu)):
-                rp[i] = randint(1,100)
-                dt = strftime("%Y年%m月%d日", localtime())
         group.send(tn+'，你在'+dt+'的人品为：'+str(rp[si])+'！\n试试。rd提升人品吧！')
     elif ('.nn' in msg.text) | ('。nn' in msg.text):
         for i in range(0,len(pu)):
@@ -435,7 +438,7 @@ def returner(msg):
                 tn = nm[i]
         s = tn+'，想获取自己的潜力信息吗？啊(哈欠)，等我roll一下..\n——————————\n'
         if ' ' in msg.text:
-            num = findall(msg.text[0]+' (\d+)', msg.text)
+            num = findall(msg.text[0:4]+' (\d+)', msg.text)
             x = int(num[0][0])
         for j in range(0,x):
             zy = 0#卓越个数
@@ -481,7 +484,7 @@ def returner(msg):
                 tn = nm[i]
         s = '欢迎来到泰拉世界哦，'+tn+'酱\n'
         if ' ' in msg.text:
-            num = findall(msg.text[0]+' (\d+)', msg.text)
+            num = findall(msg.text[0:4]+' (\d+)', msg.text)
             x = int(num[0][0])
         for i in range(0,x):
             ax = [((randint(1,6)+randint(1,6)+randint(1,6))*5) for i in range(0,8)]\
@@ -505,12 +508,13 @@ def returner(msg):
                 s += '★总和大于700！★\n'
             s += '———————————\n'
         group.send(s)            
-    elif (msg.text[0] == '.') | (msg.text[0:1] == "。"):
+    elif (msg.text[0:2] == '.r') | (msg.text[0:2] == "。r"):
         for i in range(0,len(pu)):
             if msg.member.puid == pu[i]:
                 tn = nm[i]
                 si = i
         s = ''
+        t = ''
         if f == '':
             f = msg.text
         if ' ' in f:
@@ -518,22 +522,24 @@ def returner(msg):
             z = f[len(xx)+3:]
             x = xx.split('d')[0]
             y = xx.split('d')[1]
-            num = findall('(\d+)(.+)',y)
-            y = num[0][0]
-            t = num[0][1]
-            if len(t) <= 1:
-                y = y+t
-                t = ''
+            if len(y) > 1:
+                num = findall('(\d+)(.+)',y)
+                y = num[0][0]
+                t = num[0][1]
+                if len(t) <= 1:
+                    y = y+t
+                    t = ''
         else:
             x = f.split('d')[0][2:]
             y = f.split('d')[1]
             z = ''
-            num = findall('(\d+)(.+)',y)
-            y = num[0][0]
-            t = num[0][1]
-            if len(t) <= 1:
-                y = y+t
-                t = ''
+            if len(y) > 1:
+                num = findall('(\d+)(.+)',y)
+                y = num[0][0]
+                t = num[0][1]
+                if len(t) <= 1:
+                    y = y+t
+                    t = ''
         dc = 0
         if (int(x) > 100) | (int(y) > 100000):
             group.send('@'+tn+' '+RCG[randint(0,len(RCG)-1)])
@@ -552,7 +558,7 @@ def returner(msg):
                     if t != '':
                         s += str(k) + ')' + t + '='
                 dc += k
-                if (f[1:7] == 'r1d100'):
+                if (x == '1') & (y == '100'):
                     rp[si] = rp[si] - 1 if k <= 10 else rp[si]
                     rp[si] = rp[si] + 1 if k >= 90 else rp[si]
                     if (k<=10) | (k>=90):
