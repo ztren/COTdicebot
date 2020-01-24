@@ -110,6 +110,10 @@ def returner(msg):
         nm.append(msg.member.name)
         pl.append(pers(-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0))
         rp.append(randint(1,100))
+    for i in range(0,len(pu)):
+        if msg.member.puid == pu[i]:
+            tn = nm[i]
+            si = i
     if (dt != (strftime("%Y年%m月%d日", localtime()))):
         for i in range(0,len(pu)):
             rp[i] = randint(1,100)
@@ -120,9 +124,6 @@ def returner(msg):
         else:
             f = '.r1d'+msg.text[3:]
     if (randint(1,15) == 1) & (len(msg.text) <= 30) & (rpt == True):
-        for i in range(0,len(pu)):
-            if msg.member.puid == pu[i]:
-                tn = nm[i]
         if randint(1,2) == 1:
             group.send(msg.text + '\n——' + tn)
         else:
@@ -177,10 +178,6 @@ def returner(msg):
                 group.send('输入格式好像不太对的说')
             enid = -1
     elif ('.reg' in msg.text) | ('。reg' in msg.text):
-        for i in range(0,len(pu)):
-            if msg.member.puid == pu[i]:
-                tn = nm[i]
-                si = i
         try:
             x = msg.text[5:]
             if x == '':
@@ -343,16 +340,8 @@ def returner(msg):
         except:
             group.send('输入格式好像不太对的说')
     elif ('.jrrp' in msg.text) | ('。jrrp' in msg.text):
-        for i in range(0,len(pu)):
-            if msg.member.puid == pu[i]:
-                tn = nm[i]
-                si = i
         group.send(tn+'，你在'+dt+'的人品为：'+str(rp[si])+'！\n试试。rd提升人品吧！')
     elif ('.nn' in msg.text) | ('。nn' in msg.text):
-        for i in range(0,len(pu)):
-            if msg.member.puid == pu[i]:
-                tn = nm[i]
-                si = i
         if ' ' in msg.text:
             if len(msg.text[4:]) > 30:
                 group.send('@'+tn+' '+RCG[randint(0,len(RCG)-1)])
@@ -369,9 +358,6 @@ def returner(msg):
         rpt = True
         group.send('已开启随机对话！')
     elif ('.复读' in msg.text) | ('。复读' in msg.text):
-        for i in range(0,len(pu)):
-            if msg.member.puid == pu[i]:
-                tn = nm[i]
         if ' ' in msg.text:
             if len(msg.text[4:]) > 50:
                 group.send('@'+tn+' '+RCG[randint(0,len(RCG)-1)])
@@ -433,9 +419,6 @@ def returner(msg):
             group.send('输入格式好像不太对的说')
     elif ('.art' in msg.text) | ('。art' in msg.text):
         x = 1
-        for i in range(0,len(pu)):
-            if msg.member.puid == pu[i]:
-                tn = nm[i]
         s = tn+'，想获取自己的潜力信息吗？啊(哈欠)，等我roll一下..\n——————————\n'
         if ' ' in msg.text:
             num = findall(msg.text[0:4]+' (\d+)', msg.text)
@@ -479,9 +462,6 @@ def returner(msg):
         group.send(s) 
     elif ('.ark' in msg.text) | ('。ark' in msg.text):
         x = 1
-        for i in range(0,len(pu)):
-            if msg.member.puid == pu[i]:
-                tn = nm[i]
         s = '欢迎来到泰拉世界哦，'+tn+'酱\n'
         if ' ' in msg.text:
             num = findall(msg.text[0:4]+' (\d+)', msg.text)
@@ -509,10 +489,6 @@ def returner(msg):
             s += '———————————\n'
         group.send(s)            
     elif (msg.text[0:2] == '.r') | (msg.text[0:2] == "。r"):
-        for i in range(0,len(pu)):
-            if msg.member.puid == pu[i]:
-                tn = nm[i]
-                si = i
         s = ''
         t = ''
         if f == '':
