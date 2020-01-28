@@ -1,7 +1,8 @@
 # COTdicebot
 Call of Theresa DICEBOT
 CRISPY ver5.0\
-**<color=red>注意：5.0版本及以上需要下载对应版本的WordStr，否则将无法使用！</color>**
+**注意：5.0版本及以上需要下载对应版本的WordStr，否则将无法使用！**\
+**建议下载5.0及以上版本**
 ## ——一般功能——
 .rd [text] = [因为text]投掷1D100的一颗骰子\
 .rXdY [text] = [因为text]投掷XDY的一颗骰子\
