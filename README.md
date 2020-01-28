@@ -4,7 +4,7 @@ Call of Theresa DICEBOT
 # ——CRISPY使用指南——
 ### CRISPY ver4.1
 ## ——一般功能——
-目前本机.和。通用，已经开发的功能有：
+目前本机.和。通用，已经开发的功能有：\
 .rd [text] = [因为text]投掷1D100的一颗骰子
 .rXdY [text] = [因为text]投掷XDY的一颗骰子
 .rb/rp [n] = 投掷n个奖励骰/惩罚骰
