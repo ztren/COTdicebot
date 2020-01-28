@@ -1,5 +1,5 @@
 ######WordStr ver 5.0######
-GroupName = 'CallOfNerf'
+GroupName = 'CallOfNerf'#跑团群群名
 RCG = ['cnm','sb','nmsl','傻逼','rnm','gck','爬','给爷爬','你说你马呢？','输的啥心里没丶ACD数？']#random curse generator
 YYY = ['干嘛戳我Q_Q','不要戳了啦！TAT','再戳就生气了！','干嘛QwQ','嘤','QwQ','TAT','呜呜呜他欺负我','坏人走开']#嘤嘤嘤
 DRM = ['昂？','唔……','啥啊','唔嗯','啊？','#¥…#¥!@#','搜到有','……城市……压过来了……','东子是猫娘！']#梦话
@@ -30,7 +30,7 @@ reghlp = \
 .reg [enm] <XXX+改变量> = 人物卡[敌方单位]数据改变（如AGG+1）\n\
 .reg [enm] list = 显示你的人物卡[显示敌方单位列表]\n\
 .reg enm <NAM> all = 显示名叫NAM敌方单位的详细信息\n\
-' 
+'
 atkhlp = \
 '——ATK功能使用指南——\n\
 .atk <攻击者> <受击者> <伤害量> <攻击方式>\n\
