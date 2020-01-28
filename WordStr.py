@@ -30,7 +30,7 @@ reghlp = \
 .reg [enm] <XXX+改变量> = 人物卡[敌方单位]数据改变（如AGG+1）\n\
 .reg [enm] list = 显示你的人物卡[显示敌方单位列表]\n\
 .reg enm <NAM> all = 显示名叫NAM敌方单位的详细信息\n\
-'
+' 
 atkhlp = \
 '——ATK功能使用指南——\n\
 .atk <攻击者> <受击者> <伤害量> <攻击方式>\n\
