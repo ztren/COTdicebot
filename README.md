@@ -14,7 +14,7 @@ CRISPY ver4.1
 .reg 详细见 .help reg\
 .atk 详细见 .help atk\
 .tgt 详细见 .help tgt\
-*RPT ON(OFF)* = 开启或关闭随机复读功能
+\*RPT ON(OFF)\* = 开启或关闭随机复读功能
 ## ——REG功能使用指南——
 .reg [enm] all = 根据。ark填出来的卡读入[写入敌方单位数据]\
 .reg [enm] <XXX> <数据> = 人物卡[敌方单位]数据填写（如AGG 65）\
