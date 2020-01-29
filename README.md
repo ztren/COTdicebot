@@ -17,11 +17,11 @@ https://pypi.org/project/wxpy/ \
 WINDOWS：可参考如下教程\
 https://www.douban.com/note/696046743/
 ### 3.下载DICEBOT
-https://github.com/ztren/COTdicebot/releases
+https://github.com/ztren/COTdicebot/releases \
 目前稳定版本是ver5.0。
 ### 4.运行DICEBOT
 运行**dice.py**
-若扫描二维码之后未报错并出现**>>>**字样，即说明登陆成功，可以使用。\
+若扫描二维码之后未报错并出现">>>"字样（不含双引号），即说明登陆成功，可以使用。\
 **注：wxpy并不会响应bot自身发送的消息。**
 ## 功能介绍
 ### ——一般功能——
