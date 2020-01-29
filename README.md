@@ -6,18 +6,18 @@ COTdicebot是基于CallOfTheresa的跑团规则，由ZTREN独立编写的dicebot
 ### 1.安装python**3**（已安装用户请忽略）
 **注意：本程序可能并不兼容python2。（未经过测试）**\
 官网链接如下。\
-[https://www.python.org/downloads/]
+https://www.python.org/downloads/
 ### 2.安装wxpy
 OSX、LINUX：
 ```
 pip install wxpy
 ```
 或者按照以下链接安装wxpy源代码。\
-[https://pypi.org/project/wxpy/]\
+https://pypi.org/project/wxpy/\
 WINDOWS：可参考如下教程\
-[https://www.douban.com/note/696046743/]
+https://www.douban.com/note/696046743/
 ### 3.下载DICEBOT
-[https://github.com/ztren/COTdicebot/releases]
+https://github.com/ztren/COTdicebot/releases
 目前稳定版本是ver5.0。
 ### 4.运行DICEBOT
 运行**dice.py**
