@@ -55,20 +55,20 @@ class enemy:
         self.DMS = DMS
 def time():
     if strftime("%H", localtime()) in ['02','03','04','05','06','07']:
-        group.send(WordStr.DRM[randint(0,len(DRM)-1)] + '#梦话')
-    Timer(3600,time).start()
+        group.send(WordStr.DRM[randint(0,len(WordStr.DRM)-1)] + '#梦话')
+    Timer(2000,time).start()
 @bot.register(group,TEXT)       
 def returner(msg):
     global pl,en,rpt,rgnm,rgid,CRD,rp,dt,ennm,enid
     if msg.is_at:
-        group.send(WordStr.YYY[randint(0,len(YYY)-1)])
+        group.send(WordStr.YYY[randint(0,len(WordStr.YYY)-1)])
     f = ''
     if ('.help' in msg.text) | ('。help' in msg.text):
         if len(msg.text) == 5:
-            temp = hlp+'ON' if rpt else hlp+'OFF'
+            temp = WordStr.hlp+'ON' if rpt else WordStr.hlp+'OFF'
             group.send(temp)
         else:
-            exec('group.send('+msg.text[6:]+'hlp)')
+            exec('group.send(WordStr.'+msg.text[6:]+'hlp)')
     if msg.member.puid not in pu:
         pu.append(msg.member.puid)
         nm.append(msg.member.name)
@@ -89,9 +89,9 @@ def returner(msg):
             f = '.r1d'+msg.text[3:]
     if (randint(1,15) == 1) & (len(msg.text) <= 30) & (rpt == True):
         if randint(1,2) == 1:
-            group.send(msg.text + '\n——' + tn)
+            group.send(WordStr.Repeat.format(msg.text,tn))
         else:
-            group.send(WordStr.DRM[randint(0,len(DRM)-1)] + '#梦话')
+            group.send(WordStr.DRM[randint(0,len(WordStr.DRM)-1)] + '#梦话')
     if rgnm == True:
         if msg.member.puid == pu[rgid]:
             rgnm = False
@@ -305,7 +305,7 @@ def returner(msg):
     elif ('.nn' in msg.text) | ('。nn' in msg.text):
         if ' ' in msg.text:
             if len(msg.text[4:]) > 30:
-                group.send('@'+tn+' '+WordStr.RCG[randint(0,len(RCG)-1)])
+                group.send('@'+tn+' '+WordStr.RCG[randint(0,len(WordStr.RCG)-1)])
             else:
                 nm[si] = msg.text[4:]
                 group.send(WordStr.NN.format(nm[si]))
@@ -321,9 +321,9 @@ def returner(msg):
     elif ('.复读' in msg.text) | ('。复读' in msg.text):
         if ' ' in msg.text:
             if len(msg.text[4:]) > 50:
-                group.send('@'+tn+' '+WordStr.RCG[randint(0,len(RCG)-1)])
+                group.send('@'+tn+' '+WordStr.RCG[randint(0,len(WordStr.RCG)-1)])
             else:
-                group.send(msg.text[4:] + '\n——' + tn)
+                group.send(WordStr.Repeat.format(msg.text[4:],tn))
         else:
             group.send(WordStr.EmptyRpt)
     elif ('.tgt' in msg.text) | ('。tgt' in msg.text):
@@ -458,6 +458,9 @@ def returner(msg):
             if ' ' in msg.text:
                 t = msg.text[3:].split(' ')[0]
                 t = 1 if t == '' else int(t)
+                if t > 100:
+                    group.send('@'+tn+' '+WordStr.RCG[randint(0,len(WordStr.RCG)-1)])
+                    t = -1
                 y = msg.text[3:].split(' ')[1]
             else:
                 t = int(msg.text[3:])
@@ -520,7 +523,7 @@ def returner(msg):
                     t = ''
         dc = 0
         if (int(x) > 100) | (int(y) > 100000):
-            group.send('@'+tn+' '+WordStr.RCG[randint(0,len(RCG)-1)])
+            group.send('@'+tn+' '+WordStr.RCG[randint(0,len(WordStr.RCG)-1)])
         else:
             for i in range(1,int(x)+1):
                 k = randint(1,int(y))
