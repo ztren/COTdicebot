@@ -13,8 +13,8 @@ OSX、LINUX：
 pip install wxpy
 ```
 或者按照以下链接安装wxpy源代码。\
-https://pypi.org/project/wxpy/\
-WINDOWS：可参考如下教程\
+https://pypi.org/project/wxpy/
+\WINDOWS：可参考如下教程\
 https://www.douban.com/note/696046743/
 ### 3.下载DICEBOT
 https://github.com/ztren/COTdicebot/releases
