@@ -1,3 +1,4 @@
+######WordStr ver 5.0######
 GroupName = 'CallOfNerf'#跑团群群名
 RCG = \
 ['cnm','sb','nmsl','傻逼','rnm','gck','爬','给爷爬','你说你马呢？','输的啥心里没丶ACD数？']#random curse generator
