@@ -18,7 +18,6 @@ WINDOWS：可参考如下教程\
 https://www.douban.com/note/696046743/
 ### 3.下载DICEBOT
 https://github.com/ztren/COTdicebot/releases \
-目前稳定版本是ver5.0。
 ### 4.运行DICEBOT
 运行**dice.py**，并根据提示操作。\
 若扫描二维码之后未报错并出现">>>"字样（不含双引号），即说明登陆成功，可以使用。\
@@ -28,7 +27,9 @@ https://github.com/ztren/COTdicebot/releases \
 .rd [text] = [因为text]投掷1D100的一颗骰子\
 .rXdY [text] = [因为text]投掷XDY的一颗骰子\
 .rb/rp [n] = 投掷n个奖励骰/惩罚骰\
-.rhd = 暗骰1D100\
+.ra/rc <x> [text] = [因为text]投掷以x为成功线的检定\
+.en <XXX> 通过1D100检定人物卡中XXX数值的成成长（需要先注册人物卡！）\
+.rhd [text] = [因为text]暗骰1D100\
 .ark [x] = [x次重复]获取人物卡各项数值\
 .art [x] = [x次重复]获取人物卡各项潜力信息\
 .nn [name] = 将自己在骰子中显示的昵称改为name，若[name]为空则还原默认群昵称\
@@ -39,7 +40,7 @@ https://github.com/ztren/COTdicebot/releases \
 .tgt 详细见 .help tgt\
 \*RPT ON(OFF)\* = 开启或关闭随机复读功能
 ### ——REG功能使用指南——
-.reg [enm] all = 根据。ark填出来的卡读入[写入敌方单位数据]\
+.reg [enm] all = 根据。ark填出来的卡读入[写入敌方单位数据]，第一行需为AGG\
 .reg [enm] <XXX> <数据> = 人物卡[敌方单位]数据填写（如AGG 65）\
 .reg [enm] <XXX+改变量> = 人物卡[敌方单位]数据改变（如AGG+1）\
 .reg [enm] list = 显示你的人物卡[显示敌方单位列表]\
