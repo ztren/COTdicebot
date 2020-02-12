@@ -14,7 +14,7 @@ from json import *
 from copy import *
 from threading import *
 
-import WordStr_5.0 as WordStr
+import WordStr_5 as WordStr
 
 bot = Bot(cache_path=True)
 bot.enable_puid('wxpy_puid.pkl')
