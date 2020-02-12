@@ -232,10 +232,10 @@ def returner(msg):
                     group.send(WordStr.CRDStatus.format(tn,y,str(eval('pl['+str(si)+'].'+y))))
                 elif msg.text[9] == ' ':
                     exec('pl['+str(si)+'].'+y+'=int('+msg.text[9:]+')',globals(),locals())
-                    group.send(WordStr.EnUpd.format(tn,y,str(int(msg.text[9:]))))
+                    group.send(WordStr.CRDUpd.format(tn,y,str(int(msg.text[9:]))))
                 else:
                     exec('pl['+str(si)+'].'+y+'=floor(pl['+str(si)+'].'+msg.text[5:].upper()+')',globals(),locals())
-                    group.send(WordStr.EnUpd.format(tn,y,msg.text[5:].upper(),str(eval('pl['+str(si)+'].'+y))))
+                    group.send(WordStr.CRDUpd.format(tn,y,msg.text[5:].upper(),str(eval('pl['+str(si)+'].'+y))))
         except:
             group.send(WordStr.Err)
     elif ('.atk' in msg.text) | ('。atk' in msg.text):#各种。atk
