@@ -38,6 +38,8 @@ https://github.com/ztren/COTdicebot/releases \
 .reg 详细见 .help reg\
 .atk 详细见 .help atk\
 .tgt 详细见 .help tgt\
+\*MUTE\* = 将本bot禁言\
+\*UNMUTE\* = 将本bot解除禁言\
 \*RPT ON(OFF)\* = 开启或关闭随机复读功能
 ### 2、REG功能
 .reg [enm] all = 根据。ark填出来的卡读入[写入敌方单位数据]，第一行需为AGG\
