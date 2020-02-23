@@ -41,6 +41,7 @@ https://github.com/ztren/COTdicebot/releases \
 \*MUTE(UNMUTE)\* = 将本bot禁言或解除禁言\
 \*TIMER ON(OFF)\* = 开启或关闭自动唤醒，默认关闭\
 \*EXIT\* = 关闭本bot\
+**不使用\*EXIT\*关闭程序可能会导致程序在后台继续运行，造成不必要的麻烦**\
 \*RPT ON(OFF)\* = 开启或关闭随机复读功能
 ### 2、REG功能
 .reg [enm] all = 根据。ark填出来的卡读入[写入敌方单位数据]，第一行需为AGG\
@@ -63,3 +64,4 @@ DUR = 在生命值最低的单位中随机\
 DMG = 对其造成伤害最高的单位中随机\
 
 注：[]内为选填，<>内为必填，.和。通用\
+
