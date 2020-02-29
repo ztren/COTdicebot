@@ -3,7 +3,7 @@ CRISPY, the Call of Theresa DICEBOT, by ZTREN
 ## 概述
 COTdicebot是基于CallOfTheresa的跑团规则，由ZTREN独立编写的dicebot。
 ## 安装
-### 1.安装python**3**（已安装用户请忽略）
+### 1.安装python3
 **注意：本程序可能并不兼容python2。（未经过测试）**\
 官网链接如下。\
 https://www.python.org/downloads/
