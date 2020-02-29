@@ -8,8 +8,9 @@ COTdicebot是基于CallOfTheresa的跑团规则，由ZTREN独立编写的dicebot
 官网链接如下。\
 https://www.python.org/downloads/
 ### 2.安装wxpy
-**WINDOWS用户需要安装pip。**参考如下教程安装：\
-https://www.douban.com/note/696046743/
+**WINDOWS用户需要安装pip。** \
+参考如下教程安装：\
+https://www.douban.com/note/696046743/ \
 OSX、LINUX：
 ```
 pip install wxpy
