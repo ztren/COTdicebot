@@ -16,9 +16,10 @@ OSX、LINUX：
 pip install wxpy
 ```
 或者按照以下链接安装wxpy源代码。\
-https://pypi.org/project/wxpy/ \
+https://pypi.org/project/wxpy/
 ### 3.下载DICEBOT
 https://github.com/ztren/COTdicebot/releases \
+点击最新版本的zip下载并解压。
 ### 4.运行DICEBOT
 用命令行或终端运行**DICE.py**，并根据提示操作。\
 若扫描二维码之后未报错并出现">>>"字样（不含双引号），即说明登陆成功，可以使用。\
