@@ -8,20 +8,20 @@ COTdicebot是基于CallOfTheresa的跑团规则，由ZTREN独立编写的dicebot
 官网链接如下。\
 https://www.python.org/downloads/
 ### 2.安装wxpy
+**WINDOWS用户需要安装pip。**参考如下教程安装：\
+https://www.douban.com/note/696046743/
 OSX、LINUX：
 ```
 pip install wxpy
 ```
 或者按照以下链接安装wxpy源代码。\
 https://pypi.org/project/wxpy/ \
-WINDOWS：可参考如下教程\
-https://www.douban.com/note/696046743/
 ### 3.下载DICEBOT
 https://github.com/ztren/COTdicebot/releases \
 ### 4.运行DICEBOT
-运行**dice.py**，并根据提示操作。\
+用命令行或终端运行**DICE.py**，并根据提示操作。\
 若扫描二维码之后未报错并出现">>>"字样（不含双引号），即说明登陆成功，可以使用。\
-**注：wxpy并不会响应bot自身发送的消息。**
+**注：wxpy并不会响应bot自身所在微信号发送的消息。**
 ## 功能介绍
 ### 1、一般功能
 .rd [text] = [因为text]投掷1D100的一颗骰子\
@@ -65,3 +65,10 @@ DMG = 对其造成伤害最高的单位中随机\
 
 注：[]内为选填，<>内为必填，.和。通用\
 
+## 常见问题解答
+### 1、使用微信登陆失败，如何解决？
+请进入[网页版微信网址](web.weixin.qq.com)并尝试登录网页版微信，检查自己的微信号是否可以使用网页版微信。若提示无法登录网页版微信，则需要更换使用时间更长，微信安全等级更高的微信号登录。
+### 2、打开程序时显示IndexError: list index out of range错误，如何解决
+退出网页版微信，在需要绑定骰子的群聊中发送几条消息并将其置顶再运行程序。等程序运行之后再将其取消置顶。
+### 3、我该如何修改dicebot所说的台词？
+修改WordStr文件即可。
