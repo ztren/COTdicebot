@@ -4,19 +4,24 @@ from math import *
 from time import *
 from re import *
 from json import *
+from copy import *
+from threading import *
 
 bot = Bot(cache_path=True)
 bot.enable_puid('wxpy_puid.pkl')
-group = bot.groups().search('CallOfTheresa')[0]
+group = bot.groups().search('CallOfNerf')[0]
 CRD = ['AGG','CON','DEX','APP','POW','EXP','ORG','LUK','INT','EDU','SIZ','DUR','SKL','ART']#人物卡
-RCG = ['cnm','sb','nmsl','傻逼','rnm','gck','爬','给爷爬']#random curse generator
+RCG = ['cnm','sb','nmsl','傻逼','rnm','gck','爬','给爷爬','你说你马呢？','输的啥心里没丶ACD数？']#random curse generator
 YYY = ['干嘛戳我Q_Q','不要戳了啦！TAT','再戳就生气了！','干嘛QwQ','嘤','QwQ','TAT','呜呜呜他欺负我','坏人走开']#嘤嘤嘤
-DRM = ['昂？','唔……','啥啊','唔嗯','啊？','#¥…#¥!@#','搜到有','……城市……压过来了……']#梦话
+DRM = ['昂？','唔……','啥啊','唔嗯','啊？','#¥…#¥!@#','搜到有','……城市……压过来了……','东子是猫娘！']#梦话
 hlp = \
-'——CRISPY酱使用指南——\n\
+'——CRISPY使用指南——\n\
+CRISPY ver4.1\n\
 目前本机.和。通用，已经开发的功能有：\n\
 .rd [text] = [因为text]投掷1D100的一颗骰子\n\
 .rXdY [text] = [因为text]投掷XDY的一颗骰子\n\
+.rb/rp [n] = 投掷n个奖励骰/惩罚骰\n\
+.rhd = 暗骰1D100\n\
 .ark [x] = [x次重复]获取人物卡各项数值\n\
 .art [x] = [x次重复]获取人物卡各项潜力信息\n\
 .nn [name] = 将自己在骰子中显示的昵称改为name，若[name]为空则还原默认群昵称\n\
@@ -25,6 +30,7 @@ hlp = \
 .reg 详细见 .help reg\n\
 .atk 详细见 .help atk\n\
 .tgt 详细见 .help tgt\n\
+注：[]内为选填，<>内为必填\n\
 *RPT ON(OFF)* = 开启或关闭随机复读功能\n\
 目前随机复读状态为：\
 '#帮助文本
@@ -92,7 +98,10 @@ class enemy:
         self.LTN = LTN
         self.DMG = DMG
         self.DMS = DMS
-
+def time():
+    if strftime("%H", localtime()) in ['03','06']:
+        group.send(DRM[randint(0,len(DRM)-1)] + '#梦话')
+    Timer(3000,time).start()
 @bot.register(group,TEXT)       
 def returner(msg):
     global RCG,YYY,pl,en,rpt,DRM,hlp,rgnm,rgid,CRD,rp,dt,ennm,enid
@@ -487,7 +496,48 @@ def returner(msg):
             if ax[11] >= 700:
                 s += '★总和大于700！★\n'
             s += '———————————\n'
-        group.send(s)            
+        group.send(s)
+    elif ('.rb' in msg.text) | ('。rb' in msg.text) | ('.rp' in msg.text) | ('。rp' in msg.text):
+        x1 = randint(1,100)
+        x2 = []
+        y  = ''
+        t  = 1
+        if len(msg.text) > 3:
+            if ' ' in msg.text:
+                t = msg.text[3:].split(' ')[0]
+                t = 1 if t == '' else int(t)
+                y = msg.text[3:].split(' ')[1]
+            else:
+                t = int(msg.text[3:])
+        for i in range(0,t):
+            x2.append(randint(0,10))
+        x3 = deepcopy(x2)
+        x3.append(x1 // 10)
+        if msg.text[2] == 'b':
+            if x1 % 10 == 0:
+                while min(x3) == 0:
+                    for i in range(0,len(x3)):
+                        x3[i] = 10 if x3[i] == 0 else x3[i]
+            x = min(x3) * 10 + x1 % 10
+            k = '奖励'
+        elif msg.text[2] == 'p':
+            if x1 % 10 != 0:
+                while max(x3) == 10:
+                    for i in range(0,len(x3)):
+                        x3[i] = -1 if x3[i] == 10 else x3[i]
+            elif min(x3) == 0:
+                x3.append(10)
+            x = max(x3) * 10 + x1 % 10
+            k = '惩罚'
+        if y == '':
+            group.send(tn+' 骰出了 '+msg.text[2].upper()+'='+str(x1)+'['+k+'骰：'+str(x2)+']='+str(x))
+        else:
+            group.send('因为 '+y+' 检定，'+tn+'骰出了 '+msg.text[2].upper()+'='+str(x1)+'['+k+'骰：'+str(x2)+']='+str(x))
+    elif ('.rhd' in msg.text) | ('。rhd' in msg.text):
+        group.send('CRISPY正在暗骰……')
+        fr = bot.friends().search('',puid=msg.member.puid)[0]
+        fr.send('暗骰结果是：'+str(randint(1,100)))
+        fr.send('——[Doge]——')
     elif (msg.text[0:2] == '.r') | (msg.text[0:2] == "。r"):
         s = ''
         t = ''
