@@ -31,7 +31,8 @@ def returner(msg):
         group.send(YYY[randint(0,len(YYY)-1)])
     f = ''
     if (msg.text == '.help') | (msg.text == '。help'):
-        group.send(hlp)
+        temp = hlp+'目前随机复读功能状态为：ON' if rpt else hlp+'目前随机复读功能状态为：OFF'
+        group.send(temp)
     if pu.count(msg.member.puid) == 0:
         pu.append(msg.member.puid)
         nm.append(msg.member.name)
@@ -69,7 +70,7 @@ def returner(msg):
     if (msg.text == '*RPT ON*'):
         rpt = True
         group.send('已开启随机对话！')
-    if (randint(1,10) == 1) & (len(msg.text) <= 30) & (rpt == True):
+    if (randint(1,15) == 1) & (len(msg.text) <= 30) & (rpt == True):
         for i in range(0,len(pu)):
             if msg.member.puid == pu[i]:
                 tn = nm[i]
@@ -106,9 +107,12 @@ def returner(msg):
             num = findall(s1+' (\d+)', msg.text)
             x = int(num[0][0])
         for j in range(0,x):
+            zy = 0#卓越个数
             a = [[0] * 2  for i in range(6)]
             for i in range(6):
                 a[i][0] = randint(1,5)
+                if a[i][0] == 5:
+                    zy += 1
             for i in range(5):
                 if a[i][0] == 1:
                     a[i][1] = '缺陷 -1D10 = '+str(-randint(1,10))
@@ -130,12 +134,13 @@ def returner(msg):
                 a[5][1] = '优良'
             elif a[5][0] == 5:
                 a[5][1] = '卓越'
-            s += '物理强度：'+ a[0][1]+'\n'\
-                 '生理耐受：'+ a[1][1]+'\n'\
-                 '战场机动：'+ a[2][1]+'\n'\
-                 '战术规划：'+ a[3][1]+'\n'\
-                 '战斗技巧：'+ a[4][1]+'\n'\
-                 '源石技术适应性：'+ a[5][1]+'\n'\
+            s += '物理强度：'+ a[0][1] +'\n'\
+                 '生理耐受：'+ a[1][1] +'\n'\
+                 '战场机动：'+ a[2][1] +'\n'\
+                 '战术规划：'+ a[3][1] +'\n'\
+                 '战斗技巧：'+ a[4][1] +'\n'\
+                 '源石技术适应性：'+ a[5][1] +'\n'\
+                 '“卓越”个数：'+str(zy)+'\n'\
                  '———————————\n'
         group.send(s) 
     if ('.ark' in msg.text) | ('。ark' in msg.text):
@@ -168,8 +173,10 @@ def returner(msg):
             '智力INT：'+ str(ax[8]) + '\n'\
             '教育EDU：'+ str(ax[9]) + '\n'\
             '体型SIZ：'+ str(ax[10]) + '\n'\
-            '总和SUM：'+ str(ax[11]) + '\n'\
-            '———————————\n'
+            '总和SUM：'+ str(ax[11]) + '\n'
+            if ax[11] >= 700:
+                s += '★总和大于700！★\n'
+            s += '———————————\n'
         group.send(s)            
     elif (msg.text[0] == '.') | (msg.text[0:1] == "。"):
         for i in range(0,len(pu)):
