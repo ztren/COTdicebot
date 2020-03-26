@@ -1,4 +1,4 @@
-#######DICEBOT VER 5.3#######
+######DICEBOT VER 5.3.1######
 ##########BY  ZTREN##########
 #———————————————————————————#
 #MODIIFYING OF THIS FILE IS##
@@ -14,8 +14,8 @@ from json import *
 from copy import *
 from threading import *
 
-import atexit,os
-import WordStr_5_3 as WordStr
+import os
+import WordStr_5_3_1 as WordStr
 
 bot = Bot(cache_path=True)
 bot.enable_puid('wxpy_puid.pkl')
@@ -65,24 +65,18 @@ class enemy:
         self.DMG = DMG
         self.DMS = DMS
 def WakeUp():
-    global kTimer
-    if strftime("%H", localtime()) in ['01','04','07']:
-        group.send(WordStr.DRM[randint(0,len(WordStr.DRM)-1)] + '#梦话')#1点、4点、7点自动唤醒，避免程序自动睡眠
     if TimerOn == True:
-        kTimer.start()
-kTimer = Timer(3600,WakeUp)
-def ClearSession():
-    global kTimer
-    group.send(WordStr.Farewell)
-    kTimer.cancel()
+        if strftime("%H", localtime()) in ['01','04','07']:
+            group.send(WordStr.DRM[randint(0,len(WordStr.DRM)-1)] + '#梦话')#1点、4点、7点自动唤醒，避免程序自动睡眠
+        Timer(3600,WakeUp).start()
 
 group.send(WordStr.Hello)
-atexit.register(ClearSession)
 @bot.register(group,TEXT)       
 def returner(msg):
-    global pl,en,rpt,rgnm,rgid,CRD,rp,dt,ennm,enid,Muted,kTimer
+    global pl,en,rpt,rgnm,rgid,CRD,rp,dt,ennm,enid,Muted
     if (msg.text == '*EXIT*'):#正常退出‘
-        ClearSession()
+        TimerOn = False
+        group.send(WordStr.Farewell)
         os._exit(0)
     if (msg.text == '*MUTE*'):#静言与解除静言
         Muted = True
@@ -90,16 +84,15 @@ def returner(msg):
     if (msg.text == '*UNMUTE*'):
         Muted = False
         group.send(WordStr.Unmuted)
+    if Muted == True:
+        return
     if (msg.text == '*TIMER ON*'):#是否开启定时唤醒
-        WakeUp()
         TimerOn = True
+        WakeUp()
         group.send(WordStr.TimerOn)
     if (msg.text == '*TIMER OFF*'):
         TimerOn = False
-        kTimer.cancel()
         group.send(WordStr.TimerOff)
-    if Muted == True:
-        return
     if msg.is_at:#被at就嘤嘤嘤
         group.send(WordStr.YYY[randint(0,len(WordStr.YYY)-1)])
     f = ''
@@ -171,10 +164,10 @@ def returner(msg):
 生命(.+)：(\d+)\
 ',msg.text)
                 en.append(enemy('',-1,-1,-1,0,-1,'',[],[]))
-                en[enid].NAM = num[0][0]
+                en[-1].NAM = num[0][0]
                 for i in range(1,6):
-                    exec('en['+str(enid)+'].'+num[0][i*2-1]+'=int('+num[0][i*2]+')')
-                group.send(WordStr.RenEnSuc.format(en[enid].NAM))
+                    exec('en[-1].'+num[0][i*2-1]+'=int('+num[0][i*2]+')')
+                group.send(WordStr.RegEnSuc.format(en[-1].NAM))
             except:
                 group.send(WordStr.Err)
             enid = -1
@@ -273,11 +266,7 @@ def returner(msg):
             group.send(WordStr.Err)
     elif ('.atk' in msg.text) | ('。atk' in msg.text):#各种。atk
         try:
-            num = msg.text[5:].split(' ')
-            x = num[0]
-            y = num[1]
-            n = num[2]
-            t = num[3]
+            x,y,n,t = msg.text[5:].split(' ')
             i1 = -1
             i2 = -1
             co = False
@@ -298,31 +287,31 @@ def returner(msg):
                 if t == 'TDMG':
                     if co:
                         pl[i2].DUR -= int(n)
-                        group.send(WordStr.Attack.Format(y,x,n,'真实',str(pl[i2].DUR)))
+                        group.send(WordStr.Attack.format(y,x,n,'真实',str(pl[i2].DUR)))
                     else:
                         en[i2].DUR -= int(n)
                         z = int(n)
-                        group.send(WordStr.Attack.Format(y,x,n,'真实',str(en[i2].DUR)))
+                        group.send(WordStr.Attack.format(y,x,n,'真实',str(en[i2].DUR)))
                 elif t == 'PHYS':
                     if co:
                         z = max(int(n) - pl[i2].CON // 5,int(n) // 2)
                         z = 0 if z < 0 else z
                         pl[i2].DUR -= z
-                        group.send(WordStr.Attack.Format(y,x,str(z),'物理',str(pl[i2].DUR)))
+                        group.send(WordStr.Attack.format(y,x,str(z),'物理',str(pl[i2].DUR)))
                     else:
                         z = max(int(n) - en[i2].CON // 5,int(n) // 2)
                         z = 0 if z < 0 else z
                         en[i2].DUR -= z
-                        group.send(WordStr.Attack.Format(y,x,str(z),'物理',str(en[i2].DUR)))
+                        group.send(WordStr.Attack.format(y,x,str(z),'物理',str(en[i2].DUR)))
                 elif t == 'ARTS':
                     if co:
                         z = floor(int(n)*(100-pl[i2].RES)/100)
                         z = 0 if z < 0 else z
-                        group.send(WordStr.Attack.Format(y,x,str(z),'法术',str(pl[i2].DUR)))
+                        group.send(WordStr.Attack.format(y,x,str(z),'法术',str(pl[i2].DUR)))
                     else:
                         z = floor(int(n)*(100-en[i2].RES)/100)
                         z = 0 if z < 0 else z
-                        group.send(WordStr.Attack.Format(y,x,str(z),'法术',str(en[i2].DUR)))
+                        group.send(WordStr.Attack.format(y,x,str(z),'法术',str(en[i2].DUR)))
                 else:
                     raise Exception
                 if (not co) & (not enmy):
@@ -365,7 +354,7 @@ def returner(msg):
             else:
                 group.send(WordStr.Repeat.format(msg.text[4:],tn))
         else:
-            group.send(WordStr.EmptyRpt)
+            group.send(WordStr.EmptyRpt[randint(0,1)])
     elif ('.tgt' in msg.text) | ('。tgt' in msg.text):#target
         try:
             num = msg.text[5:].split(' ')
