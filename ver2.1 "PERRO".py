@@ -6,20 +6,32 @@ from re import *
 bot = Bot(cache_path=True)
 bot.enable_puid('wxpy_puid.pkl')
 group = bot.groups().search('CallOfTheresa')[0]
-#group.send('啊，都这个时候了吗？唔不管了不管了，如果没事的话，我先会去睡觉了昂#BOT')
-RCG = ['cnm','sb','nmsl','傻逼','rnm','gck','爬','给爷爬']
-YYY = ['干嘛戳我Q_Q','不要戳了啦！TAT','再戳就生气了！','干嘛QwQ','嘤','QwQ','TAT','呜呜呜他欺负我','坏人走开']
-DRM = ['昂？','唔……','啥啊','唔嗯','啊？','#¥…#¥!@#','搜到有']
-pu = []
-nm = []
+RCG = ['cnm','sb','nmsl','傻逼','rnm','gck','爬','给爷爬']#random curse generator
+YYY = ['干嘛戳我Q_Q','不要戳了啦！TAT','再戳就生气了！','干嘛QwQ','嘤','QwQ','TAT','呜呜呜他欺负我','坏人走开']#嘤嘤嘤
+DRM = ['昂？','唔……','啥啊','唔嗯','啊？','#¥…#¥!@#','搜到有']#梦话
+hlp = \
+'——CRISPY酱使用指南——\n\
+目前本机.和。通用，已经开发的功能有：\n\
+.rd [text] = [因为text]投掷1D100的一颗骰子\n\
+.rXdY [text] = [因为text]投掷XDY的一颗骰子，支持在后面加入一位+-*/运算符\n\
+.ark [x] = [x次重复]获取人物卡各项数值\n\
+.art [x] = [x次重复]获取人物卡各项潜力信息\n\
+.nn [name] = 将自己在骰子中显示的昵称改为name，若[name]为空则还原默认群昵称\n\
+.复读 [msg] = 让骰子复读你的话//可以用来做语录\n\
+*RPT ON(OFF)* = 开启或关闭随机复读功能\n\
+'#帮助文本
+pu = []#PUID
+nm = []#PUID对应姓名
 rpt = True
 
 @bot.register(group,TEXT)       
 def returner(msg):
-    global RCG,YYY,pu,nm,rpt,DRM
+    global RCG,YYY,pu,nm,rpt,DRM,hlp
     if msg.is_at:
         group.send(YYY[randint(0,len(YYY)-1)])
     f = ''
+    if (msg.text == '.help') | (msg.text == '。help'):
+        group.send(hlp)
     if pu.count(msg.member.puid) == 0:
         pu.append(msg.member.puid)
         nm.append(msg.member.name)
@@ -74,7 +86,7 @@ def returner(msg):
         else:
             s1 = '。复读'
         if ' ' in msg.text:
-            if len(msg.text[4:]) > 30:
+            if len(msg.text[4:]) > 50:
                 group.send('@'+tn+' '+RCG[randint(0,len(RCG)-1)])
             else:
                 group.send(msg.text[4:] + '\n——' + tn)
@@ -140,18 +152,23 @@ def returner(msg):
             num = findall(s1+' (\d+)', msg.text)
             x = int(num[0][0])
         for i in range(0,x):
+            ax = [((randint(1,6)+randint(1,6)+randint(1,6))*5) for i in range(0,8)]\
+                 + [((randint(1,6)+randint(1,6)+6)*5) for i in range (0,3)] + [0]
+            for ii in range(0,11):
+                ax[11] += ax[ii]
             s += \
-            '攻击AGG：'+ str((randint(1,6)+randint(1,6)+randint(1,6))*5) + '\n'\
-            '体质CON：'+ str((randint(1,6)+randint(1,6)+randint(1,6))*5) + '\n'\
-            '敏捷DEX：'+ str((randint(1,6)+randint(1,6)+randint(1,6))*5) + '\n'\
-            '外貌APP：'+ str((randint(1,6)+randint(1,6)+randint(1,6))*5) + '\n'\
-            '意志POW：'+ str((randint(1,6)+randint(1,6)+randint(1,6))*5) + '\n'\
-            '经验EXP：'+ str((randint(1,6)+randint(1,6)+randint(1,6))*5) + '\n'\
-            '感染ORG：'+ str((randint(1,6)+randint(1,6)+randint(1,6))*5) + '\n'\
-            '幸运LUK：'+ str((randint(1,6)+randint(1,6)+randint(1,6))*5) + '\n'\
-            '智力INT：'+ str((randint(1,6)+randint(1,6)+6)*5) + '\n'\
-            '教育EDU：'+ str((randint(1,6)+randint(1,6)+6)*5) + '\n'\
-            '体型SIZ：'+ str((randint(1,6)+randint(1,6)+6)*5) + '\n'\
+            '攻击AGG：'+ str(ax[0]) + '\n'\
+            '体质CON：'+ str(ax[1]) + '\n'\
+            '敏捷DEX：'+ str(ax[2]) + '\n'\
+            '外貌APP：'+ str(ax[3]) + '\n'\
+            '意志POW：'+ str(ax[4]) + '\n'\
+            '经验EXP：'+ str(ax[5]) + '\n'\
+            '感染ORG：'+ str(ax[6]) + '\n'\
+            '幸运LUK：'+ str(ax[7]) + '\n'\
+            '智力INT：'+ str(ax[8]) + '\n'\
+            '教育EDU：'+ str(ax[9]) + '\n'\
+            '体型SIZ：'+ str(ax[10]) + '\n'\
+            '总和SUM：'+ str(ax[11]) + '\n'\
             '———————————\n'
         group.send(s)            
     elif (msg.text[0] == '.') | (msg.text[0:1] == "。"):
