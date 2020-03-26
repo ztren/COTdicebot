@@ -1,3 +1,10 @@
+#######DICEBOT VER 5.0#######
+##########BY  ZTREN##########
+#———————————————————————————#
+#MODIIFYING OF THIS FILE IS##
+#NOT ADVICED UNLESS YOU KNOW#
+######WHAT YOU ARE DOING#####
+
 from wxpy import *
 from random import *
 from math import *
@@ -7,65 +14,20 @@ from json import *
 from copy import *
 from threading import *
 
+import WordStr_5 as WordStr
+
 bot = Bot(cache_path=True)
 bot.enable_puid('wxpy_puid.pkl')
-group = bot.groups().search('CallOfNerf')[0]
+group = bot.groups().search(WordStr.GroupName)[0]
 CRD = ['AGG','CON','DEX','APP','POW','EXP','ORG','LUK','INT','EDU','SIZ','DUR','SKL','ART']#人物卡
-RCG = ['cnm','sb','nmsl','傻逼','rnm','gck','爬','给爷爬','你说你马呢？','输的啥心里没丶ACD数？']#random curse generator
-YYY = ['干嘛戳我Q_Q','不要戳了啦！TAT','再戳就生气了！','干嘛QwQ','嘤','QwQ','TAT','呜呜呜他欺负我','坏人走开']#嘤嘤嘤
-DRM = ['昂？','唔……','啥啊','唔嗯','啊？','#¥…#¥!@#','搜到有','……城市……压过来了……','东子是猫娘！']#梦话
-hlp = \
-'——CRISPY使用指南——\n\
-CRISPY ver4.1\n\
-目前本机.和。通用，已经开发的功能有：\n\
-.rd [text] = [因为text]投掷1D100的一颗骰子\n\
-.rXdY [text] = [因为text]投掷XDY的一颗骰子\n\
-.rb/rp [n] = 投掷n个奖励骰/惩罚骰\n\
-.rhd = 暗骰1D100\n\
-.ark [x] = [x次重复]获取人物卡各项数值\n\
-.art [x] = [x次重复]获取人物卡各项潜力信息\n\
-.nn [name] = 将自己在骰子中显示的昵称改为name，若[name]为空则还原默认群昵称\n\
-.复读 [msg] = 让骰子复读你的话//可以用来做语录\n\
-.jrrp = 今日人品（1d100到10以下-1，90以上+1，不包含加减）\n\
-.reg 详细见 .help reg\n\
-.atk 详细见 .help atk\n\
-.tgt 详细见 .help tgt\n\
-注：[]内为选填，<>内为必填\n\
-*RPT ON(OFF)* = 开启或关闭随机复读功能\n\
-目前随机复读状态为：\
-'#帮助文本
-reghlp = \
-'——REG功能使用指南——\n\
-.reg [enm] all = 根据。ark填出来的卡读入[写入敌方单位数据]\n\
-.reg [enm] <XXX> <数据> = 人物卡[敌方单位]数据填写（如AGG 65）\n\
-.reg [enm] <XXX+改变量> = 人物卡[敌方单位]数据改变（如AGG+1）\n\
-.reg [enm] list = 显示你的人物卡[显示敌方单位列表]\n\
-.reg enm <NAM> all = 显示名叫NAM敌方单位的详细信息\n\
-'
-atkhlp = \
-'——ATK功能使用指南——\n\
-.atk <攻击者> <受击者> <伤害量> <攻击方式>\n\
-攻击方式分为：\n\
-PHYS = 物理攻击\n\
-ARTS = 法术攻击\n\
-TDMG = 真伤攻击\n\
-'
-tgthlp = \
-'——TGT功能使用指南——\n\
-注意！只有被.atk击中的单位才能被正确计算.tgt！\n\
-.tgt <攻击者> <target方式>\n\
-target方式分为：\n\
-RAND = 完全随机\n\
-DUR = 在生命值最低的单位中随机\n\
-DMG = 对其造成伤害最高的单位中随机\n\
-'
-rpt = True
-pu = []
-nm = []
-pl = []
-en = []
-rp = []
-dt = strftime("%Y年%m月%d日", localtime())
+
+rpt = True#随机复读开关
+pu = []#存放用户PUID
+nm = []#存放用户名
+pl = []#存放用户人物卡
+en = []#存放敌方单位数据
+rp = []#存放用户人品
+dt = strftime("%Y年%m月%d日", localtime())#当前时间
 rgnm = False
 rgid = -1
 ennm = False
@@ -99,45 +61,45 @@ class enemy:
         self.DMG = DMG
         self.DMS = DMS
 def time():
-    if strftime("%H", localtime()) in ['03','06']:
-        group.send(DRM[randint(0,len(DRM)-1)] + '#梦话')
-    Timer(3000,time).start()
+    if strftime("%H", localtime()) in ['01','04','07']:
+        group.send(WordStr.DRM[randint(0,len(WordStr.DRM)-1)] + '#梦话')#1点、4点、7点自动唤醒，避免程序自动睡眠
+    Timer(2000,time).start()
 @bot.register(group,TEXT)       
 def returner(msg):
-    global RCG,YYY,pl,en,rpt,DRM,hlp,rgnm,rgid,CRD,rp,dt,ennm,enid
-    if msg.is_at:
-        group.send(YYY[randint(0,len(YYY)-1)])
+    global pl,en,rpt,rgnm,rgid,CRD,rp,dt,ennm,enid
+    if msg.is_at:#被at就嘤嘤嘤
+        group.send(WordStr.YYY[randint(0,len(WordStr.YYY)-1)])
     f = ''
-    if ('.help' in msg.text) | ('。help' in msg.text):
+    if ('.help' in msg.text) | ('。help' in msg.text):#显示帮助
         if len(msg.text) == 5:
-            temp = hlp+'ON' if rpt else hlp+'OFF'
+            temp = WordStr.hlp+'ON' if rpt else WordStr.hlp+'OFF'
             group.send(temp)
         else:
-            exec('group.send('+msg.text[6:]+'hlp)')
-    if msg.member.puid not in pu:
+            exec('group.send(WordStr.'+msg.text[6:]+'hlp)')
+    if msg.member.puid not in pu:#第一次在群中出现的人的初始化
         pu.append(msg.member.puid)
         nm.append(msg.member.name)
         pl.append(pers(-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0))
         rp.append(randint(1,100))
-    for i in range(0,len(pu)):
+    for i in range(0,len(pu)):#群成员指针
         if msg.member.puid == pu[i]:
             tn = nm[i]
             si = i
-    if (dt != (strftime("%Y年%m月%d日", localtime()))):
+    if (dt != (strftime("%Y年%m月%d日", localtime()))):#jrrp更新
         for i in range(0,len(pu)):
             rp[i] = randint(1,100)
             dt = strftime("%Y年%m月%d日", localtime())
-    if ('.rd' in msg.text) | ('。rd' in msg.text):
+    if ('.rd' in msg.text) | ('。rd' in msg.text):#将rd转化为。r1d
         if (len(msg.text) == 3) | (msg.text[3:4] == ' '):
             f = '.r1d100'+msg.text[3:]
         else:
             f = '.r1d'+msg.text[3:]
-    if (randint(1,15) == 1) & (len(msg.text) <= 30) & (rpt == True):
+    if (randint(1,15) == 1) & (len(msg.text) <= 30) & (rpt == True):#随机复读
         if randint(1,2) == 1:
-            group.send(msg.text + '\n——' + tn)
+            group.send(WordStr.Repeat.format(msg.text,tn))
         else:
-            group.send(DRM[randint(0,len(DRM)-1)] + '#梦话')
-    if rgnm == True:
+            group.send(WordStr.DRM[randint(0,len(WordStr.DRM)-1)] + '#梦话')
+    if rgnm == True:#人物卡的注册
         if msg.member.puid == pu[rgid]:
             rgnm = False
             try:
@@ -159,14 +121,11 @@ def returner(msg):
                 pl[rgid].DUR = ceil((pl[rgid].CON + pl[rgid].SIZ) / 4)
                 pl[rgid].SKL = (pl[rgid].INT + pl[rgid].EXP + pl[rgid].EDU) * 2
                 pl[rgid].ART = floor(sqrt(pl[rgid].ORG + pl[rgid].INT + pl[rgid].EDU + pl[rgid].EXP)) - 10
-                group.send('人物卡注册成功了的说，您其他数据是：\n\
-耐力DUR：'+str(pl[rgid].DUR)+'\n\
-技能点数SKL：'+str(pl[rgid].SKL)+'\n\
-最大源石出力等级ART：'+str(pl[rgid].ART)+'\n')
+                group.send(WordStr.RegSuc.format(str(pl[rgid].DUR),str(pl[rgid].SKL),str(pl[rgid].ART)))
             except:
-                group.send('输入格式好像不太对的说')
+                group.send(WordStr.Err)
             rgid = -1
-    elif ennm == True:
+    elif ennm == True:#敌方单位的注册
         if msg.member.puid == pu[enid]:
             ennm = False
             try:
@@ -182,11 +141,11 @@ def returner(msg):
                 en[enid].NAM = num[0][0]
                 for i in range(1,6):
                     exec('en['+str(enid)+'].'+num[0][i*2-1]+'=int('+num[0][i*2]+')')
-                group.send('敌方单位 '+en[enid].NAM+' 注册成功了的说')
+                group.send(WordStr.RenEnSuc.format(en[enid].NAM))
             except:
-                group.send('输入格式好像不太对的说')
+                group.send(WordStr.Err)
             enid = -1
-    elif ('.reg' in msg.text) | ('。reg' in msg.text):
+    elif ('.reg' in msg.text) | ('。reg' in msg.text):#各种。reg
         try:
             x = msg.text[5:]
             if x == '':
@@ -194,15 +153,15 @@ def returner(msg):
             if x == 'all':
                 rgnm = True
                 rgid = si
-                group.send('告诉我你的人物卡数据吧(o^^o)')
+                group.send(WordStr.InputReg)
             elif x == 'del':
                 pl[si] = pers(-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1)
-                group.send('人物卡数据被清空了！')
+                group.send(WordStr.DelReg)
             elif x == 'list':
                 if pl[si].ORG == -1:
-                    group.send(tn+'，你好像并没有注册人物卡呀(･_･;')
+                    group.send(WordStr.NotRegistered.format(tn))
                 else:
-                    group.send('以下是 '+tn+' 的人物卡数据！\n\
+                    group.send(WordStr.ListCRD.format(tn)+'\n\
 攻击AGG：'+str(pl[si].AGG)+'\n\
 体质CON：'+str(pl[si].CON)+'\n\
 敏捷DEX：'+str(pl[si].DEX)+'\n\
@@ -222,12 +181,12 @@ def returner(msg):
                 if msg.text[9:] == 'all':
                     ennm = True
                     enid = si
-                    group.send('告诉我敌方单位的数据吧o(∩_∩)o')
+                    group.send(WordStr.InputEnReg)
                 elif msg.text[9:13] == 'list':
                     if len(en) == 0:
-                        group.send('目前好像没有敌方单位呀(･_･;')
+                        group.send(WordStr.NoEnemy)
                     elif msg.text[14:] == '':
-                        s = '以下是敌方单位名单哦：\n'
+                        s = WordStr.ListEnemyAll+'\n'
                         for i in range(0,len(en)):
                             s += str(i+1)+'：'+en[i].NAM+'\n'
                         group.send(s)
@@ -235,21 +194,21 @@ def returner(msg):
                         y = -1
                         for i in range(0,len(en)):
                             if msg.text[14:] == en[i].NAM:
-                                y = i
+                                 y = i
                         if y != -1:
-                            group.send('以下是 '+en[y].NAM+' 的数据：\n\
+                            group.send(WordStr.ListEnemy.format(en[y].NAM)+'\n\
 攻击AGG：'+str(en[y].AGG)+'\n\
 体质CON：'+str(en[y].CON)+'\n\
 闪避DEX：'+str(en[y].DEX)+'\n\
 法抗RES：'+str(en[y].RES)+'\n\
 生命DUR：'+str(en[y].DUR)+'\n')
                         else:
-                            group.send('并没有找到名叫 '+msg.text[14:]+' 的敌方单位(>﹏<)')
+                            group.send(WordStr.EnNotFound.format(msg.text[14:]))
                 elif msg.text[9:12] == 'del':
                     if msg.text[13:] == '':
                         raise Exception
                     else:
-                        group.send('敌方单位 '+en[int(msg.text[13:])-1].NAM+' 被删除了！')
+                        group.send(WordStr.DelEn.format(en[int(msg.text[13:])-1].NAM))
                         en.pop(int(msg.text[13:])-1)
                 else:
                     y = -1
@@ -261,25 +220,25 @@ def returner(msg):
                         if len(y1) == 3:
                             y2 = msg.text[9:].split(' ')[2]
                             exec('en['+str(y)+'].'+y1+'=int('+y2+')',globals(),locals())
-                            group.send('敌方单位 '+en[y].NAM+' 的'+y1+'数值已经更新为'+str(int(y2))+'啦_(:з」∠)_')
+                            group.send(WordStr.EnUpd.format(en[y].NAM,y1,str(int(y2))))
                         else:
                             exec('en['+str(y)+'].'+y1[0:3]+'=floor(en['+str(y)+'].'+y1+')',globals(),locals())
-                            group.send('敌方单位 '+en[y].NAM+' 的'+y1[0:3]+'数值要改变？唔好的：\n'+y1+' → '+str(eval('en['+str(y)+'].'+y1[0:3])))
+                            group.send(WordStr.EnChange.format(en[y].NAM,y1[0:3],y1,str(eval('en['+str(y)+'].'+y1[0:3]))))
                     else:
-                        group.send('并没有找到名叫 '+msg.text[9:].split(' ')[0]+' 的敌方单位(>﹏<)')
+                        group.send(WordStr.EnNotFound.format(msg.text[9:].split(' ')[0]))
             elif msg.text[5:8].upper() in CRD:
                 y = msg.text[5:8].upper()
                 if len(msg.text) == 8:
-                    group.send(tn+'，你的'+y+'目前的数值为：'+str(eval('pl['+str(si)+'].'+y)))
+                    group.send(WordStr.CRDStatus.format(tn,y,str(eval('pl['+str(si)+'].'+y))))
                 elif msg.text[9] == ' ':
                     exec('pl['+str(si)+'].'+y+'=int('+msg.text[9:]+')',globals(),locals())
-                    group.send(tn+'的'+y+'数值已经更新为'+str(int(msg.text[9:]))+'啦_(:з」∠)_')
+                    group.send(WordStr.CRDUpd.format(tn,y,str(int(msg.text[9:]))))
                 else:
                     exec('pl['+str(si)+'].'+y+'=floor(pl['+str(si)+'].'+msg.text[5:].upper()+')',globals(),locals())
-                    group.send(tn+'的'+y+'数值要改变？唔好的：\n'+msg.text[5:].upper()+' → '+str(eval('pl['+str(si)+'].'+y)))
+                    group.send(WordStr.CRDUpd.format(tn,y,msg.text[5:].upper(),str(eval('pl['+str(si)+'].'+y))))
         except:
-            group.send('输入格式好像不太对的说')
-    elif ('.atk' in msg.text) | ('。atk' in msg.text):
+            group.send(WordStr.Err)
+    elif ('.atk' in msg.text) | ('。atk' in msg.text):#各种。atk
         try:
             num = msg.text[5:].split(' ')
             x = num[0]
@@ -306,31 +265,31 @@ def returner(msg):
                 if t == 'TDMG':
                     if co:
                         pl[i2].DUR -= int(n)
-                        group.send(y+' 受到了来自 '+x+' 的'+n+'点真实伤害！还剩下'+str(pl[i2].DUR)+'点血量！')
+                        group.send(WordStr.Attack.Format(y,x,n,'真实',str(pl[i2].DUR)))
                     else:
                         en[i2].DUR -= int(n)
                         z = int(n)
-                        group.send(y+' 受到了来自 '+x+' 的'+n+'点真实伤害！还剩下'+str(en[i2].DUR)+'点血量！')
+                        group.send(WordStr.Attack.Format(y,x,n,'真实',str(en[i2].DUR)))
                 elif t == 'PHYS':
                     if co:
-                        z = int(n) * 2 - floor(pl[i2].CON / 5)
+                        z = max(int(n) - pl[i2].CON // 5,int(n) // 2)
                         z = 0 if z < 0 else z
                         pl[i2].DUR -= z
-                        group.send(y+' 受到了来自 '+x+' 的'+str(z)+'点物理伤害！还剩下'+str(pl[i2].DUR)+'点血量！')
+                        group.send(WordStr.Attack.Format(y,x,str(z),'物理',str(pl[i2].DUR)))
                     else:
-                        z = int(n) * 2 - floor(en[i2].CON / 5)
+                        z = max(int(n) - en[i2].CON // 5,int(n) // 2)
                         z = 0 if z < 0 else z
                         en[i2].DUR -= z
-                        group.send(y+' 受到了来自 '+x+' 的'+str(z)+'点物理伤害！还剩下'+str(en[i2].DUR)+'点血量！')
+                        group.send(WordStr.Attack.Format(y,x,str(z),'物理',str(en[i2].DUR)))
                 elif t == 'ARTS':
                     if co:
                         z = floor(int(n)*(100-pl[i2].RES)/100)
                         z = 0 if z < 0 else z
-                        group.send(y+' 受到了来自 '+x+' 的'+str(z)+'点法术伤害！还剩下'+str(pl[i2].DUR)+'点血量！')
+                        group.send(WordStr.Attack.Format(y,x,str(z),'法术',str(pl[i2].DUR)))
                     else:
                         z = floor(int(n)*(100-en[i2].RES)/100)
                         z = 0 if z < 0 else z
-                        group.send(y+' 受到了来自 '+x+' 的'+str(z)+'点法术伤害！还剩下'+str(en[i2].DUR)+'点血量！')
+                        group.send(WordStr.Attack.Format(y,x,str(z),'法术',str(en[i2].DUR)))
                 else:
                     raise Exception
                 if (not co) & (not enmy):
@@ -344,37 +303,37 @@ def returner(msg):
                 if enmy:
                     en[i1].LTN = y
             else:
-                group.send('并没有找到你所说的单位啊(･_･;')
+                group.send(WordStr.UnitNotFound)
             co = False
         except:
-            group.send('输入格式好像不太对的说')
-    elif ('.jrrp' in msg.text) | ('。jrrp' in msg.text):
-        group.send(tn+'，你在'+dt+'的人品为：'+str(rp[si])+'！\n试试。rd提升人品吧！')
-    elif ('.nn' in msg.text) | ('。nn' in msg.text):
+            group.send(WordStr.Err)
+    elif ('.jrrp' in msg.text) | ('。jrrp' in msg.text):#显示今日人品
+        group.send(WordStr.Jrrp.format(tn,dt,str(rp[si])))
+    elif ('.nn' in msg.text) | ('。nn' in msg.text):#更改昵称
         if ' ' in msg.text:
             if len(msg.text[4:]) > 30:
-                group.send('@'+tn+' '+RCG[randint(0,len(RCG)-1)])
+                group.send('@'+tn+' '+WordStr.RCG[randint(0,len(WordStr.RCG)-1)])
             else:
                 nm[si] = msg.text[4:]
-                group.send('啊，那之后就把你叫做' + nm[si] + '了昂')
+                group.send(WordStr.NN.format(nm[si]))
         else:
             nm[si] = msg.member.name
-            group.send('让我忘掉' + tn + '这个称号？好啊')
-    elif (msg.text == '*RPT OFF*'):
+            group.send(WordStr.NNForget.format(tn))
+    elif (msg.text == '*RPT OFF*'):#开关复读
         rpt = False
-        group.send('已关闭随机对话！')
+        group.send(WordStr.RPT.format('关闭'))
     elif (msg.text == '*RPT ON*'):
         rpt = True
-        group.send('已开启随机对话！')
-    elif ('.复读' in msg.text) | ('。复读' in msg.text):
+        group.send(WordStr.RPT.format('开启'))
+    elif ('.复读' in msg.text) | ('。复读' in msg.text):#手动复读
         if ' ' in msg.text:
             if len(msg.text[4:]) > 50:
-                group.send('@'+tn+' '+RCG[randint(0,len(RCG)-1)])
+                group.send('@'+tn+' '+WordStr.RCG[randint(0,len(WordStr.RCG)-1)])
             else:
-                group.send(msg.text[4:] + '\n——' + tn)
+                group.send(WordStr.Repeat.format(msg.text[4:],tn))
         else:
-            group.send('耍我啊？')
-    elif ('.tgt' in msg.text) | ('。tgt' in msg.text):
+            group.send(WordStr.EmptyRpt)
+    elif ('.tgt' in msg.text) | ('。tgt' in msg.text):#target
         try:
             num = msg.text[5:].split(' ')
             x = num[0]
@@ -394,7 +353,7 @@ def returner(msg):
                         while pl[k].ORG == -1:
                             k = randint(0,len(nm)-1)
                         k = nm[k]
-                        group.send('target出随机目标为：'+k+'！')
+                        group.send(WordStr.TGT.format('随机',k))
                     elif m == 'DUR':
                         mx = 999
                         lst = []
@@ -406,7 +365,7 @@ def returner(msg):
                                     lst = [i]
                                     mx = pl[i].DUR
                         k = nm[lst[randint(0,len(lst)-1)]]
-                        group.send('target出血量最低目标为：'+k+'！')
+                        group.send(WordStr.TGT.format('血量最低',k))
                     elif m == 'DMG':
                         if en[y].DMG != []:
                             mx = max(en[y].DMG)
@@ -415,20 +374,20 @@ def returner(msg):
                                 if en[y].DMG[i] == mx:
                                     lst.append(en[y].DMS[i])
                             k = lst[randint(0,len(lst)-1)]
-                            group.send('target出对 '+x+' 造成伤害最高的目标为：'+k+'！')
+                            group.send(WordStr.TGT.format('对 '+x+' 造成伤害最高',k))
                         else:
-                            group.send(x+' 并没有受到任何伤害(･_･;')
+                            group.send(WordStr.NODMG.format(x))
                     else:
                         raise Exception
                 else:
-                    group.send('并没有任何人注册了人物卡(･_･;')
+                    group.send(WordStr.NOCRD)
             else:
-                group.send('并没有找到你所说的单位啊(･_･;')
+                group.send(WordStr.UnitNotFound)
         except:
-            group.send('输入格式好像不太对的说')
-    elif ('.art' in msg.text) | ('。art' in msg.text):
+            group.send(WordStr.Err)
+    elif ('.art' in msg.text) | ('。art' in msg.text):#获取潜力信息
         x = 1
-        s = tn+'，想获取自己的潜力信息吗？啊(哈欠)，等我roll一下..\n——————————\n'
+        s = WordStr.ART.format(tn)+'\n——————————\n'
         if ' ' in msg.text:
             num = findall(msg.text[0:4]+' (\d+)', msg.text)
             x = int(num[0][0])
@@ -469,9 +428,9 @@ def returner(msg):
                  '“卓越”个数：'+str(zy)+'\n'\
                  '———————————\n'
         group.send(s) 
-    elif ('.ark' in msg.text) | ('。ark' in msg.text):
+    elif ('.ark' in msg.text) | ('。ark' in msg.text):#人物卡生成
         x = 1
-        s = '欢迎来到泰拉世界哦，'+tn+'酱\n'
+        s = WordStr.ARK.format(tn)
         if ' ' in msg.text:
             num = findall(msg.text[0:4]+' (\d+)', msg.text)
             x = int(num[0][0])
@@ -497,7 +456,7 @@ def returner(msg):
                 s += '★总和大于700！★\n'
             s += '———————————\n'
         group.send(s)
-    elif ('.rb' in msg.text) | ('。rb' in msg.text) | ('.rp' in msg.text) | ('。rp' in msg.text):
+    elif ('.rb' in msg.text) | ('。rb' in msg.text) | ('.rp' in msg.text) | ('。rp' in msg.text):#奖励骰/惩罚骰
         x1 = randint(1,100)
         x2 = []
         y  = ''
@@ -506,6 +465,9 @@ def returner(msg):
             if ' ' in msg.text:
                 t = msg.text[3:].split(' ')[0]
                 t = 1 if t == '' else int(t)
+                if t > 100:
+                    group.send('@'+tn+' '+WordStr.RCG[randint(0,len(WordStr.RCG)-1)])
+                    t = -1
                 y = msg.text[3:].split(' ')[1]
             else:
                 t = int(msg.text[3:])
@@ -530,15 +492,15 @@ def returner(msg):
             x = max(x3) * 10 + x1 % 10
             k = '惩罚'
         if y == '':
-            group.send(tn+' 骰出了 '+msg.text[2].upper()+'='+str(x1)+'['+k+'骰：'+str(x2)+']='+str(x))
+            group.send(WordStr.RBP.format(tn,msg.text[2].upper(),str(x1),k,str(x2),str(x)))
         else:
-            group.send('因为 '+y+' 检定，'+tn+'骰出了 '+msg.text[2].upper()+'='+str(x1)+'['+k+'骰：'+str(x2)+']='+str(x))
-    elif ('.rhd' in msg.text) | ('。rhd' in msg.text):
-        group.send('CRISPY正在暗骰……')
+            group.send(WordStr.RBPn.format(y,tn,msg.text[2].upper(),str(x1),k,str(x2),str(x)))
+    elif ('.rhd' in msg.text) | ('。rhd' in msg.text):#暗骰
+        group.send(WordStr.RHDGroup)
         fr = bot.friends().search('',puid=msg.member.puid)[0]
-        fr.send('暗骰结果是：'+str(randint(1,100)))
-        fr.send('——[Doge]——')
-    elif (msg.text[0:2] == '.r') | (msg.text[0:2] == "。r"):
+        fr.send(WordStr.RHD.format(str(randint(1,100))))
+        fr.send(WordStr.RHDLine)
+    elif (msg.text[0:2] == '.r') | (msg.text[0:2] == "。r"):#普通骰子
         s = ''
         t = ''
         if f == '':
@@ -568,7 +530,7 @@ def returner(msg):
                     t = ''
         dc = 0
         if (int(x) > 100) | (int(y) > 100000):
-            group.send('@'+tn+' '+RCG[randint(0,len(RCG)-1)])
+            group.send('@'+tn+' '+WordStr.RCG[randint(0,len(WordStr.RCG)-1)])
         else:
             for i in range(1,int(x)+1):
                 k = randint(1,int(y))
@@ -588,14 +550,14 @@ def returner(msg):
                     rp[si] = rp[si] - 1 if k <= 10 else rp[si]
                     rp[si] = rp[si] + 1 if k >= 90 else rp[si]
                     if (k<=10) | (k>=90):
-                        group.send(tn+'的今日人品变动！现在是：'+str(rp[si])+'！')
+                        group.send(WordStr.RPChange.format(tn,str(rp[si])))
             if (t != '') :
                 y += t
                 s = '(' + s
             if (z == ''):
-                group.send(tn+' 骰出了 '+x+'d'+y+'='+s+str(eval('floor('+str(dc)+t+')')))
+                group.send(WordStr.ROLL.format(tn,x,y,s,str(eval('floor('+str(dc)+t+')'))))
             else:
-                group.send('由于 '+z+' 检定，'+tn+'骰出了 '+x+'d'+y+'='+s+str(eval('floor('+str(dc)+t+')')))
+                group.send(WordStr.ROLLn.format(z,tn,x,y,s,str(eval('floor('+str(dc)+t+')'))))
         f = ''
     sleep(2)
 embed()
