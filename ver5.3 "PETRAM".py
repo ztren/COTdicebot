@@ -1,4 +1,4 @@
-#######DICEBOT VER 5.2#######
+#######DICEBOT VER 5.3#######
 ##########BY  ZTREN##########
 #———————————————————————————#
 #MODIIFYING OF THIS FILE IS##
@@ -14,7 +14,8 @@ from json import *
 from copy import *
 from threading import *
 
-import WordStr_5_2 as WordStr
+import atexit,os
+import WordStr_5_3 as WordStr
 
 bot = Bot(cache_path=True)
 bot.enable_puid('wxpy_puid.pkl')
@@ -33,6 +34,8 @@ rgid = -1
 ennm = False
 enid = -1
 Muted = False
+TimerOn = False
+
 class pers:
     def __init__(self,AGG,CON,DEX,APP,POW,EXP,ORG,LUK,INT,EDU,SIZ,DUR,SKL,ART,RES):
         self.AGG = AGG
@@ -62,19 +65,39 @@ class enemy:
         self.DMG = DMG
         self.DMS = DMS
 def WakeUp():
+    global kTimer
     if strftime("%H", localtime()) in ['01','04','07']:
         group.send(WordStr.DRM[randint(0,len(WordStr.DRM)-1)] + '#梦话')#1点、4点、7点自动唤醒，避免程序自动睡眠
-    Timer(3599,WakeUp).start()
-WakeUp()
+    if TimerOn == True:
+        kTimer.start()
+kTimer = Timer(3600,WakeUp)
+def ClearSession():
+    global kTimer
+    group.send(WordStr.Farewell)
+    kTimer.cancel()
+
+group.send(WordStr.Hello)
+atexit.register(ClearSession)
 @bot.register(group,TEXT)       
 def returner(msg):
-    global pl,en,rpt,rgnm,rgid,CRD,rp,dt,ennm,enid,Muted
+    global pl,en,rpt,rgnm,rgid,CRD,rp,dt,ennm,enid,Muted,kTimer
+    if (msg.text == '*EXIT*'):#正常退出‘
+        ClearSession()
+        os._exit(0)
     if (msg.text == '*MUTE*'):#静言与解除静言
         Muted = True
         group.send(WordStr.Muted)
     if (msg.text == '*UNMUTE*'):
         Muted = False
         group.send(WordStr.Unmuted)
+    if (msg.text == '*TIMER ON*'):#是否开启定时唤醒
+        WakeUp()
+        TimerOn = True
+        group.send(WordStr.TimerOn)
+    if (msg.text == '*TIMER OFF*'):
+        TimerOn = False
+        kTimer.cancel()
+        group.send(WordStr.TimerOff)
     if Muted == True:
         return
     if msg.is_at:#被at就嘤嘤嘤
