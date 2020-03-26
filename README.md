@@ -1,5 +1,6 @@
 # COTdicebot
-CRISPY, the Call of Theresa DICEBOT, by ZTREN
+CRISPY, the Call of Theresa DICEBOT, by ZTREN\
+某一天，开发者终于明白把名字起的很好听没有一点卵用。
 ## 概述
 COTdicebot是基于CallOfTheresa的跑团规则，由ZTREN独立编写的dicebot。
 ## 安装
