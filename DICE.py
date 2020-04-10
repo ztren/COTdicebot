@@ -16,7 +16,7 @@ from copy import *
 from threading import *
 
 import os
-import WordStr_5_3_1 as WordStr
+import WordStr
 
 bot = Bot(cache_path=True)
 bot.enable_puid('wxpy_puid.pkl')

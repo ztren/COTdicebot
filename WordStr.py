@@ -4,7 +4,7 @@
 #THIS FILE IS FREE TO MODIFY#
 ############ENJOY!###########
 
-GroupName = '【信息泄露风险upup】'#跑团群群名
+GroupName = '【#龙猫抓回来了#】'#跑团群群名
 RCG = \
 ['cnm','sb','nmsl','傻逼','rnm','gck','爬','给爷爬','你说你马呢？','输的啥心里没丶ACD数？']#random curse generator
 YYY = \
